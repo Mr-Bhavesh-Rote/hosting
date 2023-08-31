@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask App Interface</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Flask App Interface</h1>
+
+    <h2>Analyze Sentiment</h2>
+    <form id="sentiment-form">
+        <label for="sentiment-text">Text:</label>
+        <textarea id="sentiment-text" name="text" rows="4" cols="50"></textarea>
+        <br>
+        <button type="button" id="analyze-sentiment">Analyze Sentiment</button>
+        <p id="sentiment-result"></p>
+    </form>
+
+    <h2>Scrape URL</h2>
+    <form id="scrape-form">
+        <label for="scrape-url">URL:</label>
+        <input type="text" id="scrape-url" name="url">
+        <label for="user-id">User ID:</label>
+        <input type="text" id="user-id" name="user_id">
+        <br>
+        <button type="button" id="scrape-url-button">Scrape URL</button>
+        <p id="scrape-result"></p>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            $("#analyze-sentiment").click(function() {
+                var text = $("#sentiment-text").val();
+                $.ajax({
+                    type: "POST",
+                    url: "/analyze_sentiment",
+                    contentType: "application/json",
+                    data: JSON.stringify({ "text": text }),
+                    success: function(result) {
+                        $("#sentiment-result").text("Sentiment: " + result.highest_sentiment + " (" + result.highest_score + ")");
+                    },
+                    error: function(error) {
+                        $("#sentiment-result").text("Error: " + error.responseJSON.error);
+                    }
+                });
+            });
+
+            $("#scrape-url-button").click(function() {
+                var url = $("#scrape-url").val();
+                var userId = $("#user-id").val();
+                $.ajax({
+                    type: "POST",
+                    url: "/urldata",
+                    contentType: "application/json",
+                    data: JSON.stringify({ "url": url, "user_id": userId }),
+                    success: function(result) {
+                        $("#scrape-result").text("Scraping and upload completed.");
+                    },
+                    error: function(error) {
+                        $("#scrape-result").text("Error: " + error.responseJSON.error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

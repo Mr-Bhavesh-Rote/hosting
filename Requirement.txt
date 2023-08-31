@@ -1,0 +1,7 @@
+Flask==2.1.1
+requests==2.26.0
+scrapy==2.5.1
+twisted>=21.7.0,<22.0.0
+azure-storage-blob==12.10.0
+stringcase==1.2.0
+flask-cors>=3.0.0,<4.0.0
